@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Państwa-Miasta</string>
+    <string name="nickname_hint">Co najmniej 3 znaki</string>
+    <string name="nickname_instruction">Podaj Twoją ksywkę</string>
+    <string name="pokoj">Pokój</string>
+    <string name="stop">STOP</string>
+    <string name="rozpocznij">Rozpocznij</string>
+    <string name="zatwierd">Zatwierdź</string>
+    <string name="mainMenuButton1Label">Załóż grę</string>
+    <string name="mainMenuButton2Label">Dołącz do gry</string>
+    <string-array name="roundsNum">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="gamemode">
+        <item>Klasyczny</item>
+    </string-array>
+    <string-array name="categoryNum">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="powt_rz_has_o">Powtórz hasło</string>
+    <string name="e_mail">E-mail</string>
+    <string name="zarejestruj_si">Zarejestruj się</string>
+    <string name="zaloguj">Zaloguj</string>
+    <string name="has_o">Hasło</string>
+    <string name="nick_w_grze">Nick w grze</string>
+</resources>
