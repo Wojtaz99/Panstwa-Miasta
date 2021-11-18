@@ -2,16 +2,23 @@ package com.example.panstwa_miasta.main_game
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.panstwa_miasta.R
+import com.example.panstwa_miasta.login.LoginActivity
 import com.example.panstwa_miasta.results.ResultsActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlin.math.max
 
 class GameActivity : AppCompatActivity() {
 
@@ -24,6 +31,7 @@ class GameActivity : AppCompatActivity() {
     private var maxRounds: Int = 0
     private var myNick: String? = null
     private var gameId: String? = null
+    private var thread : TimerThread = TimerThread(this)
 
     private lateinit var db: FirebaseDatabase
     private lateinit var gameRef: DatabaseReference
@@ -35,7 +43,8 @@ class GameActivity : AppCompatActivity() {
         setViews()
         db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app/")
 
-        myNick = intent.getStringExtra("myNick")
+        checkUser()
+
         gameId = intent.getStringExtra("gameId").toString()
         gameRef = db.reference.child("Games").child(gameId!!)
 
@@ -50,6 +59,19 @@ class GameActivity : AppCompatActivity() {
             getGameCategories()
         }
         checkRounds()
+        findViewById<FloatingActionButton>(R.id.floatingActionButton).setOnClickListener { endRound() }
+        timer()
+    }
+
+    // Jeszcze nie wiem czy to potrzebne ale gdzieś może będzie wykorzystane
+    private fun checkUser() {
+        var currUser = FirebaseAuth.getInstance().currentUser
+        if (currUser == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        } else {
+            myNick = currUser.displayName
+        }
     }
 
     private fun checkRounds() {
@@ -77,7 +99,21 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun timer() {
-        //TODO odmierzanie czasu i zmiana labela zegara
+        thread.start()
+    }
+
+    fun updateTime(time : Int) {
+        var minutes = 0
+        var seconds = time
+        while (seconds - 60 >= 0) {
+            minutes++
+            seconds -= 60
+        }
+        var timeString = "$minutes:$seconds"
+        if (seconds < 10) {
+            timeString = "$minutes:0$seconds"
+        }
+        findViewById<TextView>(R.id.timerView).text = timeString
     }
 
     private fun getGameCategories() {
@@ -89,7 +125,6 @@ class GameActivity : AppCompatActivity() {
                         }
                         recyclerView.adapter?.notifyDataSetChanged()
                     }
-
                     override fun onCancelled(error: DatabaseError) {}
                 })
     }
@@ -118,8 +153,16 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    fun showGameResults() {
+    private fun showGameResults() {
         val i = Intent(this, ResultsActivity::class.java)
         startActivity(i)
+        finish()
+    }
+
+    fun endRound() {
+        thread.running = false
+        Log.d("PM2021", "Round Ends")
+        showGameResults()
+        //TODO po naciśnięciu  przycisku lub jak czas się skończy
     }
 }

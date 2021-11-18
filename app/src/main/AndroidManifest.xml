@@ -12,23 +12,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PaństwaMiasta" >
-        <activity android:name="com.example.panstwa_miasta.login.LoginActivity">
+        <activity android:name=".login.LoginActivity">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+        <activity android:name=".login.RegisterActivity" />
+        <activity android:name=".results.ResultsActivity" />
+        <activity android:name=".create_game.CreateGameActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.panstwa_miasta.login.RegisterActivity" />
-        <activity android:name="com.example.panstwa_miasta.results.ResultsActivity" />
-        <activity android:name="com.example.panstwa_miasta.CreateGameActivity" />
-        <activity android:name="com.example.panstwa_miasta.MainMenuActivity" />
-        <activity android:name="com.example.panstwa_miasta.main_game.GameActivity" />
-        <activity android:name="com.example.panstwa_miasta.waiting_room.RoomActivity" >
+        <activity android:name=".MainMenuActivity" />
+        <activity android:name=".main_game.GameActivity" />
+        <activity android:name=".waiting_room.RoomActivity" >
+        <!--<intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>-->
 
         </activity>
-        <activity android:name="com.example.panstwa_miasta.ServerConnectionActivity" />
-        <activity android:name="com.example.panstwa_miasta.MainActivity">
+        <activity android:name=".ServerConnectionActivity" />
+        <activity android:name=".MainActivity">
 
         </activity>
     </application>

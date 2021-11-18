@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
+import com.example.panstwa_miasta.databinding.ActivityMainBinding
 import com.example.panstwa_miasta.databinding.ActivityServerConnectionBinding
 import com.example.panstwa_miasta.waiting_room.RoomActivity
+import java.net.PortUnreachableException
 
 class ServerConnectionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityServerConnectionBinding

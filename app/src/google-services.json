@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "773903956451",
+    "firebase_url": "https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "panstwa-miasta-a2611",
+    "storage_bucket": "panstwa-miasta-a2611.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773903956451:android:d0b21f71152d3ebc4788d6",
+        "android_client_info": {
+          "package_name": "com.example.panstwa_miasta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773903956451-c4ldevi8oq483jni4sue081rjl0g6o9g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxKjKXUoNy_y5Ekr-uchGPZF9BJrKy3dQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773903956451-c4ldevi8oq483jni4sue081rjl0g6o9g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
