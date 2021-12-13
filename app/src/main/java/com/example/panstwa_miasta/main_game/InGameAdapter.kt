@@ -1,5 +1,6 @@
 package com.example.panstwa_miasta.main_game
 
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -7,22 +8,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
+import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.example.panstwa_miasta.R
+import java.nio.file.WatchEvent
 
 class InGameAdapter(
         var answers: ArrayList<Answer>,
+        private var context: Context
 ) :
     RecyclerView.Adapter<InGameAdapter.ViewHolder>() {
 
-    private var iTextChange : ITextChange? = null
-
-    inner class ViewHolder(view: View, iTextChange: ITextChange) : RecyclerView.ViewHolder(view) {
+    var isEditable: Boolean = true
+    inner class ViewHolder(view: View, iTextChanged: ITextChange) : RecyclerView.ViewHolder(view) {
         var categoryLabel: TextView? = null
+        var iTextChange : ITextChange? = null
         val userInput: EditText
+
         init {
             categoryLabel = view.findViewById(R.id.categoryLabel)
             userInput = view.findViewById(R.id.answer)
+            iTextChange = iTextChanged
             userInput.addTextChangedListener(iTextChange)
         }
     }
@@ -34,9 +42,19 @@ class InGameAdapter(
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        iTextChange?.updatePosition(position)
-        viewHolder.categoryLabel?.text = answers[position].category
-        viewHolder.userInput.setText(answers[position].answer)
+        var ans = answers[position]
+        viewHolder.iTextChange?.updatePosition(position)
+        viewHolder.categoryLabel?.text = ans.category
+        viewHolder.userInput.setText(ans.answer)
+        if(ans.isAccepted == AnswerState.WRONG)
+            viewHolder.userInput.setBackgroundColor(
+                ContextCompat.getColor(context, R.color.wrong_red))
+        if(ans.isAccepted == AnswerState.FULL_POINTS)
+            viewHolder.userInput.setBackgroundColor(
+                ContextCompat.getColor(context, R.color.correct_green))
+        if(ans.isAccepted == AnswerState.REPEATED)
+            viewHolder.userInput.setBackgroundColor(
+                ContextCompat.getColor(context, R.color.repeated_yellow))
     }
 
     override fun getItemCount() = answers.size

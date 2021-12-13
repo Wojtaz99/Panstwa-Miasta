@@ -1,27 +1,26 @@
-package com.example.panstwa_miasta.main_game
+package com.example.panstwa_miasta.main_game.answers_voting
 
-import android.util.Log
-
-class TimerThread(private val gameActivity: GameActivity) : Thread() {
-
+class VotingTimerThread(private val votingActivity: VotingActivity) : Thread() {
+    @Volatile
     var running: Boolean = true
+    private var timeMax: Float = 15.0F
+    private var time: Float = 15.0F
 
     override fun run() {
-        var time = 90
         val targetTime : Long = 1000 // milliseconds
         var startTime: Long
         var waitTime: Long
         var timeMillis: Long
         while(running && time > 0) {
             startTime = System.nanoTime()
-            gameActivity.runOnUiThread {
-                gameActivity.updateTime(time)
+            votingActivity.runOnUiThread {
+                votingActivity.updateTime((timeMax - time) / timeMax)
             }
             time--
             timeMillis = (System.nanoTime() - startTime)/ 1_000_000
             waitTime = targetTime - timeMillis
             sleep(waitTime)
         }
-        gameActivity.endRound()
+        if(!votingActivity.ended) votingActivity.endVoting()
     }
 }
