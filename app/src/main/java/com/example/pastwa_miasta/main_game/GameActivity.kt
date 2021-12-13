@@ -122,6 +122,7 @@ class GameActivity : AppCompatActivity() {
                 }
                 override fun onCancelled(error: DatabaseError) {}
             })
+        gameRef.child("Reported").removeValue()
     }
 
     override fun onStop() {
@@ -334,7 +335,7 @@ class GameActivity : AppCompatActivity() {
                             (it.value as ArrayList<HashMap<String, String>>).last()
                         for (elem in map) {
                             if (dataSnapshot.child(it.key!!).child(currentRound.toString())
-                                    .child(elem.key).value == false)
+                                    .child(elem.key).value == "WRONG")
                                 reportToDatabase(it.key!!, elem.key)
                         }
                     }
