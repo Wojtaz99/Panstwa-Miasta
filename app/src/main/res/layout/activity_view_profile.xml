@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:gravity="center"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/profile"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
-        android:layout_margin="16dp"
-        android:contentDescription="avatar photo"
-        android:src="@drawable/sample_avatar_cropped"
-        app:maxImageSize="56dp"
-        app:tint="@null" />
+    android:gravity="center_horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/main_bg5">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,20 +14,19 @@
             <TextView
                 android:id="@+id/dataLabel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60sp"
                 android:padding="10dp"
-                android:layout_weight="1"
                 android:autoSizeMaxTextSize="32sp"
                 android:autoSizeMinTextSize="17sp"
                 android:autoSizeStepGranularity="1sp"
                 android:autoSizeTextType="uniform"
                 android:gravity="center"
-                android:text="Dane użytkownika"
+                android:text="@string/dane_u_ytkownika"
                 android:textColor="#000000" />
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50sp"
                 android:foregroundTint="#FFFFFF"
                 android:orientation="horizontal"
                 android:padding="10dp">
@@ -46,30 +34,31 @@
                 <TextView
                     android:id="@+id/nicknameLabel"
                     android:layout_width="0px"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:autoSizeMaxTextSize="32sp"
-                    android:autoSizeMinTextSize="17sp"
+                    android:autoSizeMinTextSize="20sp"
                     android:autoSizeStepGranularity="1sp"
                     android:autoSizeTextType="uniform"
                     android:textColor="#000000"
-                    android:text="Nick"/>
+                    android:text="@string/nick"/>
 
                 <TextView
                     android:id="@+id/nicknameText"
                     android:layout_width="0px"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:autoSizeMaxTextSize="32sp"
                     android:autoSizeMinTextSize="17sp"
+                    android:textColor="@color/black"
                     android:autoSizeStepGranularity="1sp"
-                    android:layout_weight="2"
-                    android:text="" />
-
+                    android:gravity="center"
+                    android:layout_weight="2" />
             </LinearLayout>
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50sp"
                 android:foregroundTint="#FFFFFF"
                 android:orientation="horizontal"
                 android:padding="10dp">
@@ -77,7 +66,7 @@
                 <TextView
                     android:id="@+id/emailLabel"
                     android:layout_width="0px"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:autoSizeMaxTextSize="32sp"
@@ -85,44 +74,44 @@
                     android:autoSizeStepGranularity="1sp"
                     android:autoSizeTextType="uniform"
                     android:textColor="#000000"
-                    android:text="E-mail"/>
+                    android:text="@string/e_mail"/>
 
                 <TextView
                     android:id="@+id/emailText"
                     android:layout_width="0px"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:autoSizeMaxTextSize="32sp"
                     android:autoSizeMinTextSize="17sp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
                     android:autoSizeStepGranularity="1sp"
-                    android:layout_weight="2"
-                    android:text="" />
+                    android:layout_weight="2" />
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/statsLabel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50sp"
                 android:padding="10dp"
-                android:layout_weight="1"
                 android:autoSizeMaxTextSize="32sp"
-                android:autoSizeMinTextSize="17sp"
+                android:autoSizeMinTextSize="15sp"
                 android:autoSizeStepGranularity="1sp"
                 android:autoSizeTextType="uniform"
                 android:gravity="center"
-                android:text="Statystyki"
+                android:text="@string/statystyki"
                 android:textColor="#000000" />
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50sp"
                 android:foregroundTint="#FFFFFF"
                 android:orientation="horizontal"
                 android:padding="10dp">
 
                 <TextView
                     android:id="@+id/pointsLabel"
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:autoSizeMaxTextSize="32sp"
@@ -130,22 +119,23 @@
                     android:autoSizeStepGranularity="1sp"
                     android:autoSizeTextType="uniform"
                     android:textColor="#000000"
-                    android:text="Zdobyte punkty"/>
+                    android:text="@string/zdobyte_punkty"/>
 
                 <TextView
                     android:id="@+id/points"
                     android:layout_width="0px"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:autoSizeMaxTextSize="32sp"
+                    android:textColor="@color/black"
                     android:autoSizeMinTextSize="17sp"
                     android:autoSizeStepGranularity="1sp"
-                    android:layout_weight="2"
-                    android:text="" />
+                    android:gravity="center"
+                    android:layout_weight="1" />
 
             </LinearLayout>
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50sp"
                 android:foregroundTint="#FFFFFF"
                 android:orientation="horizontal"
                 android:padding="10dp">
@@ -153,40 +143,40 @@
                 <TextView
                     android:id="@+id/wonGamesLabel"
                     android:layout_width="0px"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:autoSizeMaxTextSize="32sp"
-                    android:autoSizeMinTextSize="17sp"
+                    android:autoSizeMinTextSize="15sp"
                     android:autoSizeStepGranularity="1sp"
                     android:autoSizeTextType="uniform"
                     android:textColor="#000000"
-                    android:text="Wygrane gry"/>
+                    android:text="@string/wygrane_gry"/>
 
                 <TextView
                     android:id="@+id/wonGames"
                     android:layout_width="0px"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:autoSizeMaxTextSize="32sp"
-                    android:autoSizeMinTextSize="17sp"
+                    android:autoSizeMinTextSize="15sp"
                     android:autoSizeStepGranularity="1sp"
-                    android:layout_weight="2"
-                    android:text="" />
+                    android:gravity="center"
+                    android:textColor="@color/black" />
 
             </LinearLayout>
         </LinearLayout>
     <TextView
         android:id="@+id/friendsLabel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60sp"
         android:padding="10dp"
-        android:layout_weight="1"
         android:autoSizeMaxTextSize="32sp"
         android:autoSizeMinTextSize="17sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
         android:gravity="center"
-        android:text="Znajomi"
+        android:text="@string/znajomi"
         android:visibility="invisible"
         android:textColor="#000000" />
 
@@ -205,6 +195,7 @@
             android:layout_weight="0.9"
             android:autofillHints="login"
             android:ems="10"
+            android:textColor="@color/black"
             android:hint="@string/nazwa_u_ytkownika"
             android:inputType="textPersonName"
             android:visibility="invisible"/>
@@ -217,7 +208,8 @@
             android:layout_margin="7sp"
             android:layout_weight="0.8"
             android:padding="1dp"
-            android:text="Dodaj"
+            android:text="@string/dodaj"
+            android:textColor="@color/white"
             android:visibility="invisible"/>
     </LinearLayout>
 
@@ -233,7 +225,7 @@
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Wyloguj"
+        android:text="@string/wyloguj"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
