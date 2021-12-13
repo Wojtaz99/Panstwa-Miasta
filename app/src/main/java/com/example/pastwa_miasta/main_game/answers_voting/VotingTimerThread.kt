@@ -1,10 +1,10 @@
-package com.example.panstwa_miasta.main_game
+package com.example.panstwa_miasta.main_game.answers_voting
 
-class TimerThread(private val gameActivity: GameActivity) : Thread() {
-
+class VotingTimerThread(private val votingActivity: VotingActivity) : Thread() {
     @Volatile
     var running: Boolean = true
-    var time: Int = 90
+    private var timeMax: Float = 15.0F
+    private var time: Float = 15.0F
 
     override fun run() {
         val targetTime : Long = 1000 // milliseconds
@@ -13,18 +13,14 @@ class TimerThread(private val gameActivity: GameActivity) : Thread() {
         var timeMillis: Long
         while(running && time > 0) {
             startTime = System.nanoTime()
-            gameActivity.runOnUiThread {
-                gameActivity.updateTime(time)
+            votingActivity.runOnUiThread {
+                votingActivity.updateTime((timeMax - time) / timeMax)
             }
             time--
             timeMillis = (System.nanoTime() - startTime)/ 1_000_000
             waitTime = targetTime - timeMillis
             sleep(waitTime)
         }
-        if(!gameActivity.ended) gameActivity.endRound()
-    }
-
-    fun changeTime(newTime: Int) {
-        this.time = newTime
+        if(!votingActivity.ended) votingActivity.endVoting()
     }
 }

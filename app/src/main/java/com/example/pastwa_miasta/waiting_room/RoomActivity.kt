@@ -3,26 +3,38 @@ package com.example.panstwa_miasta.waiting_room
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.panstwa_miasta.Player
 import com.example.panstwa_miasta.R
+import com.example.panstwa_miasta.ViewProfileActivity
+import com.example.panstwa_miasta.login.LoginActivity
 import com.example.panstwa_miasta.main_game.GameActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class RoomActivity : AppCompatActivity(), IRecyclerViewClick {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var playersList: ArrayList<Player>
+    private lateinit var joinedRecyclerView: RecyclerView
+    private lateinit var invitedRecyclerView: RecyclerView
+    private lateinit var joinedPlayersList: ArrayList<Player>
+    private lateinit var invitedPlayersList: ArrayList<Player>
     private lateinit var playerCounterView: TextView
+    private lateinit var playerNickEditText: EditText
 
-    private var myNick: String? = null
-    private var gameId: String? = null
+    private var isHost: Boolean = false
+    private lateinit var myNick: String
+    private lateinit var gameId: String
 
     private lateinit var db: FirebaseDatabase
     private lateinit var gameRef: DatabaseReference
@@ -32,37 +44,75 @@ class RoomActivity : AppCompatActivity(), IRecyclerViewClick {
         setContentView(R.layout.activity_room)
         db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app/")
 
-        myNick = intent.getStringExtra("myNick")
-        //gameId = intent.getStringExtra("gameId").toString()
-        gameId = "1"
+        checkUser()
+        gameId = intent.getStringExtra("gameId").toString()
+        isHost = intent.getBooleanExtra("isHost", false)
         gameRef = db.reference.child("Games").child(gameId!!)
-        playersList = ArrayList()
+        joinedPlayersList = ArrayList()
+        invitedPlayersList = ArrayList()
 
-        findViewById<Button>(R.id.button).setOnClickListener {
+        findViewById<Button>(R.id.startGameButton).setOnClickListener {
             startGame()
+        }
+
+        findViewById<Button>(R.id.inviteButton).setOnClickListener {
+            checkIfPlayerAlreadyJoined()
         }
 
         setViews()
         listenForJoiningPlayers()
+        listenForInvitedPlayers()
         listenForGameStart()
     }
 
-    private fun setViews() {
-        recyclerView = findViewById(R.id.recyclerViewRoom)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        val customAdapter = RoomAdapter(playersList, this)
-        recyclerView.adapter = customAdapter
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        playerCounterView = findViewById(R.id.playerCounterLabel)
-        playerCounterView.text = "${playersList.size} graczy"
+    private fun checkUser() {
+        val currUser = FirebaseAuth.getInstance().currentUser
+        if (currUser == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        } else {
+            myNick = currUser.displayName.toString()
+        }
     }
+
+    private fun setViews() {
+        findViewById<Button>(R.id.startGameButton).isVisible = isHost
+        playerNickEditText = findViewById(R.id.playersNicksToInviteEditText)
+        invitedRecyclerView = findViewById(R.id.recyclerViewRoomInvited)
+        invitedRecyclerView.layoutManager = LinearLayoutManager(this)
+        val customAdapter2 = RoomAdapter(false, invitedPlayersList, this)
+        invitedRecyclerView.adapter = customAdapter2
+        invitedRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(invitedRecyclerView)
+        
+        joinedRecyclerView = findViewById(R.id.recyclerViewRoomJoined)
+        joinedRecyclerView.layoutManager = LinearLayoutManager(this)
+        val customAdapter = RoomAdapter(true, joinedPlayersList, this)
+        joinedRecyclerView.adapter = customAdapter
+        joinedRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        playerCounterView = findViewById(R.id.playerCounterLabel)
+        playerCounterView.text = "${joinedPlayersList.size} graczy"
+    }
+
+    private var itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
+        object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                                target: RecyclerView.ViewHolder): Boolean { return false }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val player = invitedPlayersList[viewHolder.adapterPosition]
+                gameRef.child("Invited").child(player.name).removeValue()
+                db.reference.child("Users").child(player.name).child("Requests").child(myNick).removeValue()
+                invitedRecyclerView.adapter!!.notifyDataSetChanged()
+            }
+        }
 
     private fun listenForJoiningPlayers() {
         gameRef.child("Players").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                playersList.clear()
+                joinedPlayersList.clear()
                 dataSnapshot.children.forEach {
-                    playersList.add(Player(it.key.toString()))
+                    joinedPlayersList.add(Player(it.key.toString()))
                 }
                 refresh()
             }
@@ -70,8 +120,71 @@ class RoomActivity : AppCompatActivity(), IRecyclerViewClick {
         })
     }
 
+    private fun listenForInvitedPlayers() {
+        gameRef.child("Invited").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                invitedPlayersList.clear()
+                dataSnapshot.children.forEach {
+                    invitedPlayersList.add(Player(it.key.toString()))
+                }
+                refresh()
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    private fun checkIfPlayerAlreadyJoined() {
+        val nick = playerNickEditText.text.toString()
+        gameRef.child("Players").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(dataSnapshot.child(nick).exists()) {
+                    playerNickEditText.error = "Ten gracz już dołączył!"
+                } else {
+                    checkIfPlayerAlreadyInvited(nick)
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    private fun checkIfPlayerAlreadyInvited(nick: String) {
+        gameRef.child("Invited").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(dataSnapshot.child(nick).exists()) {
+                    playerNickEditText.error = "Ten gracz już został zaproszony!"
+                } else {
+                    checkIfPlayerExists(nick)
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    private fun inviteInDatabase(nick: String) {
+        db.reference.child("Users").child(nick).child("Requests").child(myNick).setValue(gameId)
+        gameRef.child("Invited").child(nick).setValue(gameId)
+    }
+
+    private fun checkIfPlayerExists(nick: String) {
+        db.reference.child("Users")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(dataSnapshot.child(nick).exists()) {
+                    inviteInDatabase(nick)
+                } else {
+                    playerNickEditText.error = "Gracz o takim nicku nie istnieje!"
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Firebase ", "Error: ", error.toException())
+            }
+        })
+    }
+
     private fun listenForGameStart() {
-        gameRef.child("Game_flag").addValueEventListener(object : ValueEventListener {
+        if(isHost) return
+        gameRef.child("Game_flag")
+            .addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if(dataSnapshot.value == true)
                     startGame()
@@ -80,38 +193,50 @@ class RoomActivity : AppCompatActivity(), IRecyclerViewClick {
         })
     }
 
-    override fun onItemClick(pos: Int) {
-        refresh()
-    }
-
     @SuppressLint("SetTextI18n")
     private fun refresh() {
-        playerCounterView.text = "${playersList.size} graczy"
-        recyclerView.adapter?.notifyDataSetChanged()
+        playerCounterView.text = "${joinedPlayersList.size} graczy"
+        joinedRecyclerView.adapter?.notifyDataSetChanged()
+        invitedRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.run {
-            putParcelableArrayList("playersList", java.util.ArrayList(playersList))
+            putParcelableArrayList("joinedPlayersList", java.util.ArrayList(joinedPlayersList))
         }
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        val restoredAllPictures = savedInstanceState.getParcelableArrayList<Player>("playersList")
+        val restoredAllPictures = savedInstanceState.getParcelableArrayList<Player>("joinedPlayersList")
         if(restoredAllPictures != null) {
-            playersList = restoredAllPictures
-            (recyclerView.adapter as RoomAdapter).players = restoredAllPictures
+            joinedPlayersList = restoredAllPictures
+            (joinedRecyclerView.adapter as RoomAdapter).players = restoredAllPictures
         }
         refresh()
     }
 
     fun startGame() {
+        gameRef.child("Game_flag").setValue(true)
+        db.reference.child("Games").child(gameId).child("CurrentRound").setValue(1)
         val i = Intent(this, GameActivity::class.java)
-        i.putExtra("myNick", myNick)
         i.putExtra("gameId", gameId)
         startActivity(i)
         finish()
+    }
+
+    private fun viewProfile(nick: String) {
+        val i = Intent(this, ViewProfileActivity::class.java)
+        i.putExtra("user", nick)
+        startActivity(i)
+    }
+
+    override fun onJoinedAvatarClicked(pos: Int) {
+        viewProfile(joinedPlayersList[pos].name)
+    }
+
+    override fun onInvitedAvatarClicked(pos: Int) {
+        viewProfile(invitedPlayersList[pos].name)
     }
 }

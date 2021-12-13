@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foregroundTint="#FFFFFF"
-    android:gravity="center"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/imageView"
+        android:id="@+id/profile"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
@@ -19,16 +17,21 @@
         app:tint="@null" />
 
     <TextView
-        android:id="@+id/playerLabel"
-        android:layout_width="0px"
-        android:layout_height="40dp"
-        android:layout_weight="2"
+        android:id="@+id/invitationsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
         android:autoSizeMaxTextSize="32sp"
-        android:autoSizeMinTextSize="15sp"
+        android:autoSizeMinTextSize="18sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
-        android:text="TextView"
-        android:textColor="#000000"
-        android:textAlignment="textStart"/>
+        android:text="@string/zaproszenia"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:layout_margin="10sp"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewInv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10sp"/>
 </LinearLayout>
