@@ -42,7 +42,7 @@ class RoomActivity : AppCompatActivity(), IRecyclerViewClick {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
-        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app//")
+        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app/")
 
         checkUser()
         gameId = intent.getStringExtra("gameId").toString()
@@ -57,10 +57,6 @@ class RoomActivity : AppCompatActivity(), IRecyclerViewClick {
 
         findViewById<Button>(R.id.inviteButton).setOnClickListener {
             checkIfPlayerAlreadyJoined()
-        }
-
-        findViewById<FloatingActionButton>(R.id.profile).setOnClickListener {
-            viewProfile()
         }
 
         setViews()
@@ -84,14 +80,14 @@ class RoomActivity : AppCompatActivity(), IRecyclerViewClick {
         playerNickEditText = findViewById(R.id.playersNicksToInviteEditText)
         invitedRecyclerView = findViewById(R.id.recyclerViewRoomInvited)
         invitedRecyclerView.layoutManager = LinearLayoutManager(this)
-        val customAdapter2 = RoomAdapter(invitedPlayersList, this)
+        val customAdapter2 = RoomAdapter(false, invitedPlayersList, this)
         invitedRecyclerView.adapter = customAdapter2
         invitedRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(invitedRecyclerView)
         
         joinedRecyclerView = findViewById(R.id.recyclerViewRoomJoined)
         joinedRecyclerView.layoutManager = LinearLayoutManager(this)
-        val customAdapter = RoomAdapter(joinedPlayersList, this)
+        val customAdapter = RoomAdapter(true, joinedPlayersList, this)
         joinedRecyclerView.adapter = customAdapter
         joinedRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         playerCounterView = findViewById(R.id.playerCounterLabel)
@@ -197,10 +193,6 @@ class RoomActivity : AppCompatActivity(), IRecyclerViewClick {
         })
     }
 
-    override fun onItemClick(pos: Int) {
-        refresh()
-    }
-
     @SuppressLint("SetTextI18n")
     private fun refresh() {
         playerCounterView.text = "${joinedPlayersList.size} graczy"
@@ -234,9 +226,17 @@ class RoomActivity : AppCompatActivity(), IRecyclerViewClick {
         finish()
     }
 
-    private fun viewProfile() {
+    private fun viewProfile(nick: String) {
         val i = Intent(this, ViewProfileActivity::class.java)
-        i.putExtra("user", "null")
+        i.putExtra("user", nick)
         startActivity(i)
+    }
+
+    override fun onJoinedAvatarClicked(pos: Int) {
+        viewProfile(joinedPlayersList[pos].name)
+    }
+
+    override fun onInvitedAvatarClicked(pos: Int) {
+        viewProfile(invitedPlayersList[pos].name)
     }
 }

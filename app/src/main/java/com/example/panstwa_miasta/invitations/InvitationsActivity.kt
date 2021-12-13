@@ -29,7 +29,7 @@ class InvitationsActivity: AppCompatActivity(), IButtonClick {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_invitations)
-        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app//")
+        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app/")
         myRef = db.reference
         checkUser()
         myRequests = db.getReference("Users").child(myNick).child("Requests")

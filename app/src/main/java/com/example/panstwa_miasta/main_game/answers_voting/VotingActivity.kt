@@ -41,7 +41,7 @@ class VotingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_voting)
         timerProgressBar = findViewById(R.id.timerProgressBar)
 
-        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app//")
+        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app/")
         gameId = intent.getStringExtra("gameId").toString()
         currentRound = intent.getIntExtra("currRound", -1)
         previousLetter = intent.getStringExtra("previousLetter").toString()

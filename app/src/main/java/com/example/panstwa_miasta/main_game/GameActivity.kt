@@ -53,7 +53,7 @@ class GameActivity : AppCompatActivity() {
 
         answersList = ArrayList()
         setViews()
-        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app//")
+        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app/")
         checkUser()
         onlyResults = intent.getBooleanExtra("onlyResults", false)
         isHost = intent.getBooleanExtra("isHost", false)

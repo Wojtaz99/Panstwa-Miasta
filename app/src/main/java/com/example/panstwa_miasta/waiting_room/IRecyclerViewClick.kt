@@ -1,5 +1,6 @@
 package com.example.panstwa_miasta.waiting_room
 
 interface IRecyclerViewClick {
-    fun onItemClick(adapterPosition: Int)
+    fun onJoinedAvatarClicked(adapterPosition: Int)
+    fun onInvitedAvatarClicked(adapterPosition: Int)
 }

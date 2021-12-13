@@ -42,7 +42,7 @@ class RegisterFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_register, container, false)
         mAuth = FirebaseAuth.getInstance()
-        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app//")
+        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app/")
 
         nickView = view.findViewById(R.id.nickView)
         loginView = view.findViewById(R.id.loginView)
@@ -94,6 +94,7 @@ class RegisterFragment : Fragment() {
                             }
                         }
                     db.reference.child("Users").child(nick).child("Uid").setValue(currentUser.uid)
+                    db.reference.child("Users").child(nick).child("Email").setValue(currentUser.email)
                     db.reference.child("Users").child(nick).child("Stats").child("WonGames").setValue(0)
                     db.reference.child("Users").child(nick).child("Stats").child("Points").setValue(0)
                     clearForm()

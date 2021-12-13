@@ -40,10 +40,10 @@ class CreateGameActivity : AppCompatActivity() {
         }
 
         //var gameId = "1" // TYMCZASOWE
-        //db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app//")
+        //db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app/")
         //gameRef = db.reference.child("Games").child(gameId!!)
 
-        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app//")
+        db = Firebase.database("https://panstwa-miasta-a2611-default-rtdb.europe-west1.firebasedatabase.app/")
         myRef = db.reference
         checkUser()
         prepareSpinners()
