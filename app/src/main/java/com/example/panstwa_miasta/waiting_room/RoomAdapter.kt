@@ -7,9 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.panstwa_miasta.Player
 import com.example.panstwa_miasta.R
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class RoomAdapter(var ifThisIsJoined: Boolean,
+class RoomAdapter(
         var players: ArrayList<Player>,
         private var iRecycleViewClick: IRecyclerViewClick,
 ) :
@@ -17,14 +16,9 @@ class RoomAdapter(var ifThisIsJoined: Boolean,
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var playerLabel: TextView? = null
-        var avatar: FloatingActionButton? = null
         init {
             playerLabel = view.findViewById(R.id.playerLabel)
-            avatar = view.findViewById(R.id.imageView)
-            if(ifThisIsJoined)
-                avatar?.setOnClickListener { iRecycleViewClick.onJoinedAvatarClicked(adapterPosition) }
-            else
-                avatar?.setOnClickListener { iRecycleViewClick.onInvitedAvatarClicked(adapterPosition) }
+            view.setOnClickListener { iRecycleViewClick.onItemClick(adapterPosition) }
         }
     }
 
